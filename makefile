@@ -14,9 +14,16 @@ LD=ld
 LD_X86_FLAGS=-m elf_i386 -O2 -nostdlib -T linker.ld
 LD_X86_64_FLAGS=
 OUTPUT=ponmai
+ISO_OUTPUT=ponmai.iso
 
-test: $(OUTPUT)
-	@echo "OKAY"
+test: $(ISO_OUTPUT)
+	@qemu-system-x86_64 -cdrom $< -m 1G
+
+$(ISO_OUTPUT): $(OUTPUT)
+	@echo "Creating iso..."
+	@cp ponmai iso/boot
+	@cp -r grub iso/boot
+	@grub-mkrescue /usr/lib/grub/i386-pc -o $(ISO_OUTPUT) iso/
 
 $(OUTPUT): $(X86OBJ)
 	@echo [Linking $@]

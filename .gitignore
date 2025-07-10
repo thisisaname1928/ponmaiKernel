@@ -1,3 +1,5 @@
 *.o
 
 ponmai
+iso/boot/ponmai
+ponmai.iso
