@@ -4,10 +4,9 @@ bits 32
 _start:
     mov eax, termLine
     mov dword [eax], 0xb8000
-    mov edi, bootMsg
-    call print
     mov edi, bootMsg2
     call print
+    call checkLongMode
     hlt
     jmp $
 
@@ -29,9 +28,32 @@ print:
         add dword [eax], 80*2 ; new line
         ret
 
+checkLongMode:
+    mov eax, 0x80000000
+    cpuid
+    cmp eax, 0x80000001
+    jb .noLongMode
+
+    mov eax, 0x80000001
+    cpuid
+    test edx, 0x20000000
+    jz .noLongMode
+
+    mov edi, bootMsg3
+    call print
+    ret
+    .noLongMode:
+        mov edi, bootMsg
+        call print
+        hlt
+        jmp $
+
+
+
 section .data
-bootMsg db "booted into _start",0
-bootMsg2 db "tryna boot into x86_64 long mode", 0
+bootMsg db "This device doesn't support long mode", 0
+bootMsg2 db "Tryna boot into x86_64 long mode", 0
+bootMsg3 db "Long mode check passed!", 0
 
 section .bss
 termLine:
