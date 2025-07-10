@@ -13,7 +13,7 @@ ASM_X86_64_FLAGS=
 LD=ld
 LD_X86_FLAGS=-m elf_i386 -O2 -nostdlib -T linker.ld
 LD_X86_64_FLAGS=
-OUTPUT=paimon
+OUTPUT=ponmai
 
 test: $(OUTPUT)
 	@echo "OKAY"
