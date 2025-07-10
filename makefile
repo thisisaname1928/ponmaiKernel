@@ -25,6 +25,8 @@ $(ISO_OUTPUT): $(OUTPUT)
 	@cp -r grub iso/boot
 	@grub-mkrescue /usr/lib/grub/i386-pc -o $(ISO_OUTPUT) iso/
 
+t: $(OUTPUT)
+
 $(OUTPUT): $(X86OBJ)
 	@echo [Linking $@]
 	@$(LD) $(X86OBJ) -o $@ $(LD_X86_FLAGS)
@@ -43,6 +45,5 @@ $(OUTPUT): $(X86OBJ)
 
 %.asm.x86_64.o: %.asm
 	# not support yet
-
 clean:
 	rm $(shell find ./ -type f -name "*.o")

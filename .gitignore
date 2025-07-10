@@ -1,5 +1,5 @@
 *.o
 
-ponmai
+./ponmai
 iso/boot/ponmai
 ponmai.iso
