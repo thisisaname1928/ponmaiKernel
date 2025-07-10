@@ -1,6 +1,6 @@
 ### Ponmai kernel
 ## Test
-Just run this
+Just run this by:
 ```
 make
 ```
