@@ -2,6 +2,7 @@ global _start
 section .text
 bits 32
 _start:
+    call setUpGDT32
     mov eax, termLine
     mov dword [eax], 0xb8000
     mov edi, bootMsg2
@@ -9,6 +10,20 @@ _start:
     call checkLongMode
     hlt
     jmp $
+
+setUpGDT32:
+    lgdt [GDT32R]
+    jmp (GDT32.CODE-GDT32):reloadCS
+    ret
+
+reloadCS:
+    mov ax, GDT32.DATA-GDT32
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
+    mov ss, ax
+    ret
 
 print:
     mov ebx, [termLine]
@@ -54,6 +69,31 @@ section .data
 bootMsg db "This device doesn't support long mode", 0
 bootMsg2 db "Tryna boot into x86_64 long mode", 0
 bootMsg3 db "Long mode check passed!", 0
+
+GDT32R:
+    dw GDT32End - GDT32
+    dd GDT32
+
+GDT32:
+    .NULL:
+        dq 0
+
+    .CODE:
+        dw 0xffff     ; low limit
+        dw 0          ; low base
+        db 0          ; mid base
+        db 0x9a       ; access bit
+        db 0b11001111 ; flags + high limit
+        db 0          ; high base
+
+    .DATA:
+        dw 0xffff     ; low limit
+        dw 0          ; low base
+        db 0          ; mid base
+        db 0x92       ; access bit
+        db 0b11001111 ; flags + high limit
+        db 0          ; high base
+GDT32End:
 
 section .bss
 termLine:
