@@ -19,7 +19,7 @@ ISO_OUTPUT=ponmai.iso
 test: $(ISO_OUTPUT)
 	@qemu-system-x86_64 -cdrom $< -m 1G
 
-$(ISO_OUTPUT): $(OUTPUT)
+$(ISO_OUTPUT): $(OUTPUT) grub/grub.cfg
 	@echo "Creating iso..."
 	@cp ponmai iso/boot
 	@cp -r grub iso/boot

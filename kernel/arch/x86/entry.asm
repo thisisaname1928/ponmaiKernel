@@ -3,11 +3,14 @@ section .text
 bits 32
 _start:
     call setUpGDT32
+    
     mov eax, termLine
     mov dword [eax], 0xb8000
+    
+    call initIDT32
+    
     mov edi, bootMsg2
     call print
-    call initIDT32
     call checkLongMode
     mov eax, 0
     div eax
@@ -31,7 +34,7 @@ reloadCS:
 print:
     mov ebx, [termLine]
     .printLoop:
-        mov eax, 0x0a00
+        mov eax, 0x7000
         mov al, [edi]
         cmp al, 0
         je .endLoop
@@ -49,7 +52,7 @@ print:
 printAndHang:
     mov ebx, [termLine]
     .printLoop:
-        mov eax, 0x0a00
+        mov eax, 0x7400
         mov al, [edi]
         cmp al, 0
         je .endLoop
