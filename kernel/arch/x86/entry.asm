@@ -12,8 +12,6 @@ _start:
     mov edi, bootMsg2
     call print
     call checkLongMode
-    mov eax, 0
-    div eax
     hlt
     jmp $
 
